@@ -8,8 +8,9 @@ export async function getStaticProps() {
 }
 
 import type { InferGetStaticPropsType, NextPage } from 'next'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import ChampionCard from '../components/ChampionCard'
+import genIndex from '../utils/genIndex'
 import populateIndexArray from '../utils/populateIndexArray'
 
 interface ChampionProps {
@@ -40,10 +41,10 @@ const Home = ({
     })
 
     function getRandomChamps() {
+        console.log(randomChamps)
         if (champList) {
             setRandomChamps([])
-            let temp = populateIndexArray(5, champList.length)
-            setIndexArray(temp)
+            setIndexArray(populateIndexArray(5, champList.length))
             for (var i = 0; i < indexArray.length; i++) {
                 setRandomChamps((prevArray) => {
                     return [...prevArray, champList[indexArray[i]]]
@@ -53,28 +54,18 @@ const Home = ({
     }
 
     function rerollChampion(index: number) {
-        const prevChampionListIndex = indexArray[index]
-        let newChampionListIndex = Math.floor(Math.random() * champList.length)
-        while (
-            newChampionListIndex === 0 ||
-            indexArray.includes(newChampionListIndex) ||
-            newChampionListIndex === prevChampionListIndex
-        ) {
-            let temp = newChampionListIndex
-            newChampionListIndex = Math.floor(Math.random() * champList.length)
-            console.log(
-                'Hit on Zero or Duplicate Index Reroll new index from ' +
-                    temp +
-                    ' to ' +
-                    newChampionListIndex
-            )
-        }
+        const prevChampListIndex = indexArray[index]
+        const newChampListIndex = genIndex(
+            prevChampListIndex,
+            champList.length,
+            indexArray
+        )
 
         setRandomChamps((prevArray) => {
             let newArray = []
             for (let i = 0; i < prevArray.length; i++) {
                 if (i == index) {
-                    newArray.push(champList[newChampionListIndex])
+                    newArray.push(champList[newChampListIndex])
                 } else {
                     newArray.push(prevArray[i])
                 }
@@ -87,12 +78,12 @@ const Home = ({
         <div className="flex h-screen flex-col items-center justify-center bg-gray-800">
             <div className="m-4 flex">{championCards}</div>
 
-            <button
-                className="block h-16 rounded-full bg-white px-8 py-2"
+            <div
+                className="block h-16 cursor-pointer  border border-gray-300 bg-gray-700 px-8 py-2"
                 onClick={getRandomChamps}
             >
-                Random
-            </button>
+                RANDOM
+            </div>
         </div>
     )
 }
