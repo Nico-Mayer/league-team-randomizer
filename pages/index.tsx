@@ -7,7 +7,7 @@ export async function getStaticProps() {
     return { props: { champList: data } }
 }
 
-import type { NextPage } from 'next'
+import type { InferGetStaticPropsType, NextPage } from 'next'
 import { useState, useEffect } from 'react'
 import ChampionCard from '../components/ChampionCard'
 import populateIndexArray from '../utils/populateIndexArray'
@@ -20,7 +20,9 @@ interface ChampionProps {
     squarePortraitPath: string
 }
 
-const Home: NextPage = ({ champList }) => {
+const Home = ({
+    champList,
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
     const [indexArray, setIndexArray] = useState<Array<number>>(
         populateIndexArray(5, champList.length)
     )
