@@ -1,3 +1,12 @@
+export async function getStaticProps() {
+    const res = await fetch(
+        'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-summary.json'
+    )
+    const data = await res.json()
+
+    return { props: { champList: data } }
+}
+
 import type { NextPage } from 'next'
 import { useState, useEffect } from 'react'
 import ChampionCard from '../components/ChampionCard'
@@ -11,10 +20,11 @@ interface ChampionProps {
     squarePortraitPath: string
 }
 
-const Home: NextPage = () => {
-    const [championList, setChampionList] = useState<Array<ChampionProps>>([])
+const Home: NextPage = ({ champList }) => {
+    const [indexArray, setIndexArray] = useState<Array<number>>(
+        populateIndexArray(5, champList.length)
+    )
     const [randomChamps, setRandomChamps] = useState<Array<ChampionProps>>([])
-    const [indexArray, setIndexArray] = useState<Array<number>>([])
 
     const championCards = randomChamps?.map((champion, index) => {
         return (
@@ -27,40 +37,29 @@ const Home: NextPage = () => {
         )
     })
 
-    useEffect(() => {
-        fetch(
-            'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-summary.json'
-        )
-            .then((response) => response.json())
-            .then((data) => setChampionList(data))
-    }, [])
-
     function getRandomChamps() {
-        setRandomChamps([])
-        setIndexArray(populateIndexArray(5, championList.length))
-        for (var i = 0; i < indexArray.length; i++) {
-            setRandomChamps((prevArray) => {
-                return [...prevArray, championList[indexArray[i]]]
-            })
+        if (champList) {
+            setRandomChamps([])
+            let temp = populateIndexArray(5, champList.length)
+            setIndexArray(temp)
+            for (var i = 0; i < indexArray.length; i++) {
+                setRandomChamps((prevArray) => {
+                    return [...prevArray, champList[indexArray[i]]]
+                })
+            }
         }
-        console.log(championList)
     }
 
     function rerollChampion(index: number) {
         const prevChampionListIndex = indexArray[index]
-        let newChampionListIndex = Math.floor(
-            Math.random() * championList.length
-        )
-        console.log(prevChampionListIndex)
+        let newChampionListIndex = Math.floor(Math.random() * champList.length)
         while (
             newChampionListIndex === 0 ||
             indexArray.includes(newChampionListIndex) ||
             newChampionListIndex === prevChampionListIndex
         ) {
             let temp = newChampionListIndex
-            newChampionListIndex = Math.floor(
-                Math.random() * championList.length
-            )
+            newChampionListIndex = Math.floor(Math.random() * champList.length)
             console.log(
                 'Hit on Zero or Duplicate Index Reroll new index from ' +
                     temp +
@@ -73,7 +72,7 @@ const Home: NextPage = () => {
             let newArray = []
             for (let i = 0; i < prevArray.length; i++) {
                 if (i == index) {
-                    newArray.push(championList[newChampionListIndex])
+                    newArray.push(champList[newChampionListIndex])
                 } else {
                     newArray.push(prevArray[i])
                 }
