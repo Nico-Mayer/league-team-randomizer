@@ -51,43 +51,46 @@ function ChampionCard({ champion, index, rerollFunc, keystoneIndex }: Props) {
             </div>
 
             {/* Bottom Part  */}
+            {champion.id ? (
+                <div className="absolute bottom-0 flex h-[30%] w-full   p-[4.5%]">
+                    <div className="  innerShadow h-full w-full   text-center">
+                        <span className=" w-full   font-bold text-white shadow-2xl">
+                            {champion?.name}
+                        </span>
 
-            <div className="absolute bottom-0 flex h-[30%] w-full   p-[4.5%]">
-                <div className="  innerShadow h-full w-full   text-center">
-                    <span className=" w-full   font-bold text-white shadow-2xl">
-                        {champion?.name}
-                    </span>
-
-                    <div className="relative h-full flex-row  px-2 pb-6">
-                        <div className="top-0 right-0 flex h-full w-full ">
-                            <div className="flex flex-1 justify-center "></div>
-                            <div className="flex flex-1 justify-center  pt-5">
-                                <div className="flex h-12 w-12 rounded-full border border-yellow-700 bg-gray-900 p-2">
-                                    <img
-                                        src="https://raw.communitydragon.org/pbe/plugins/rcp-fe-lol-static-assets/global/default/svg/position-jungle-light.svg"
-                                        alt=""
-                                    />
+                        <div className="relative h-full flex-row  px-2 pb-6">
+                            <div className="top-0 right-0 flex h-full w-full ">
+                                <div className="flex flex-1 justify-center "></div>
+                                <div className="flex flex-1 justify-center  pt-5">
+                                    <div className="flex h-12 w-12 rounded-full border border-yellow-700 bg-gray-900 p-2">
+                                        <img
+                                            src="https://raw.communitydragon.org/pbe/plugins/rcp-fe-lol-static-assets/global/default/svg/position-jungle-light.svg"
+                                            alt=""
+                                        />
+                                    </div>
+                                </div>
+                                <div className="flex flex-1 justify-end ">
+                                    <div className="mt-5 mr-3 flex h-10 w-10 rounded-full bg-gray-900">
+                                        <img
+                                            className=" h-10 w-10"
+                                            src={
+                                                champion.id
+                                                    ? keystones[keystoneIndex]
+                                                          ?.imgURL
+                                                    : ''
+                                            }
+                                            alt=""
+                                        />
+                                    </div>
                                 </div>
                             </div>
-                            <div className="flex flex-1 justify-end ">
-                                <div className="mt-5 mr-3 flex h-10 w-10 rounded-full bg-gray-900">
-                                    <img
-                                        className=" h-10 w-10"
-                                        src={
-                                            champion.id
-                                                ? keystones[keystoneIndex]
-                                                      ?.imgURL
-                                                : ''
-                                        }
-                                        alt=""
-                                    />
-                                </div>
-                            </div>
+                            <div className="absolute top-0 right-0 h-full w-full border border-red-700 bg-black opacity-20 blur-lg "></div>
                         </div>
-                        <div className="absolute top-0 right-0 h-full w-full border border-red-700 bg-black opacity-20 blur-lg "></div>
                     </div>
                 </div>
-            </div>
+            ) : (
+                <div></div>
+            )}
         </div>
     )
 }
