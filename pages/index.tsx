@@ -10,8 +10,12 @@ export async function getStaticProps() {
 import type { InferGetStaticPropsType, NextPage } from 'next'
 import { useState } from 'react'
 import ChampionCard from '../components/ChampionCard'
+import genEmtyChampArr from '../utils/genEmtyChampArr'
 import genIndex from '../utils/genIndex'
 import populateIndexArray from '../utils/populateIndexArray'
+import keystones from '../public/keystones'
+import genKeystoneArr from '../utils/genKeystoneArr'
+import genRandNum from '../utils/genRandNum'
 
 interface ChampionProps {
     alias: string
@@ -27,8 +31,12 @@ const Home = ({
     const [indexArray, setIndexArray] = useState<Array<number>>(
         populateIndexArray(5, champList.length)
     )
-    const [randomChamps, setRandomChamps] = useState<Array<ChampionProps>>([])
-
+    const [randomChamps, setRandomChamps] = useState<Array<ChampionProps>>(
+        genEmtyChampArr()
+    )
+    const [keystoneIndexArr, setKeystoneIndArr] = useState<Array<number>>(
+        genKeystoneArr(keystones.length)
+    )
     const championCards = randomChamps?.map((champion, index) => {
         return (
             <ChampionCard
@@ -36,14 +44,15 @@ const Home = ({
                 index={index}
                 champion={champion}
                 rerollFunc={rerollChampion}
+                keystoneIndex={keystoneIndexArr[index]}
             />
         )
     })
 
     function getRandomChamps() {
-        console.log(randomChamps)
         if (champList) {
             setRandomChamps([])
+            setKeystoneIndArr(genKeystoneArr(keystones.length))
             setIndexArray(populateIndexArray(5, champList.length))
             for (var i = 0; i < indexArray.length; i++) {
                 setRandomChamps((prevArray) => {
@@ -60,6 +69,17 @@ const Home = ({
             champList.length,
             indexArray
         )
+        setKeystoneIndArr((prevArray) => {
+            let newArray = []
+            for (let i = 0; i < keystoneIndexArr.length; i++) {
+                if (i === index) {
+                    newArray.push(genRandNum(keystones.length))
+                } else {
+                    newArray.push(prevArray[i])
+                }
+            }
+            return newArray
+        })
 
         setRandomChamps((prevArray) => {
             let newArray = []
@@ -75,7 +95,7 @@ const Home = ({
     }
 
     return (
-        <div className="flex h-screen flex-col items-center justify-center bg-gray-800">
+        <div className="background flex h-screen flex-col items-center justify-center bg-gray-800">
             <div className="m-4 flex">{championCards}</div>
 
             <div

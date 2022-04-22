@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.background {
+    background: url(../public/background.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.innerShadow {
+    box-shadow: inset 6px -27px 50px -50px #000000;
+}
+
+.img.test:hover {
+    filter: blur(5px);
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(5px);
+}
