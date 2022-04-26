@@ -18,25 +18,29 @@ function ChampionCard({ champion, index, rerollFunc, keystoneIndex }: Props) {
     const lane = () => {
         switch (index) {
             case 0:
-                return 'Top'
+                return 'https://raw.communitydragon.org/pbe/plugins/rcp-fe-lol-static-assets/global/default/svg/position-top.svg'
             case 1:
-                return 'Jungle'
+                return 'https://raw.communitydragon.org/pbe/plugins/rcp-fe-lol-static-assets/global/default/svg/position-jungle.svg'
             case 2:
-                return 'Mid'
+                return 'https://raw.communitydragon.org/pbe/plugins/rcp-fe-lol-static-assets/global/default/svg/position-middle.svg'
             case 3:
-                return 'Adc'
+                return 'https://raw.communitydragon.org/pbe/plugins/rcp-fe-lol-static-assets/global/default/svg/position-bottom.svg'
             case 4:
-                return 'Support'
+                return 'https://raw.communitydragon.org/pbe/plugins/rcp-fe-lol-static-assets/global/default/svg/position-utility.svg'
         }
     }
-    console.log(keystoneIndex)
+
     return (
         <div
-            className="relative m-2 inline-block min-w-[310px]  max-w-[310px] cursor-pointer transition  duration-500 hover:scale-105 "
+            className=" relative m-2 inline-block  min-w-[310px] max-w-[310px] cursor-pointer  transition duration-500 hover:scale-105"
             onClick={() => rerollFunc(index)}
         >
             <div className="relative">
-                <img src="border.svg" className="  relative z-10" alt="" />
+                <img
+                    src="border.svg"
+                    className="undragable  relative z-10"
+                    alt=""
+                />
                 <div className="absolute top-0  left-0 h-full w-full">
                     <img
                         className="absolute z-0 h-full w-full object-cover  p-[4.5%] "
@@ -60,13 +64,15 @@ function ChampionCard({ champion, index, rerollFunc, keystoneIndex }: Props) {
 
                         <div className="relative h-full flex-row  px-2 pb-6">
                             <div className="top-0 right-0 flex h-full w-full ">
-                                <div className="flex flex-1 justify-center "></div>
+                                <div className="flex flex-1 justify-center ">
+                                    <div className="mt-8 flex h-8 w-16 bg-gray-900">
+                                        <img src="" alt="" />
+                                        <img src="" alt="" />
+                                    </div>
+                                </div>
                                 <div className="flex flex-1 justify-center  pt-5">
                                     <div className="flex h-12 w-12 rounded-full border border-yellow-700 bg-gray-900 p-2">
-                                        <img
-                                            src="https://raw.communitydragon.org/pbe/plugins/rcp-fe-lol-static-assets/global/default/svg/position-jungle-light.svg"
-                                            alt=""
-                                        />
+                                        <img src={lane()} alt="" />
                                     </div>
                                 </div>
                                 <div className="flex flex-1 justify-end ">

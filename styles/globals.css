@@ -12,8 +12,10 @@
     box-shadow: inset 6px -27px 50px -50px #000000;
 }
 
-.img.test:hover {
-    filter: blur(5px);
-    -webkit-filter: blur(5px);
-    -moz-filter: blur(5px);
+.undragable {
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
