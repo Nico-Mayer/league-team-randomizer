@@ -12,9 +12,20 @@ interface Props {
     rerollFunc: (number: number) => void
     index: number
     keystoneIndex: number
+    sumSpells: Array<{
+        id: number
+        name: string
+        imgURL: string
+    }>
 }
 
-function ChampionCard({ champion, index, rerollFunc, keystoneIndex }: Props) {
+function ChampionCard({
+    champion,
+    index,
+    rerollFunc,
+    keystoneIndex,
+    sumSpells,
+}: Props) {
     const lane = () => {
         switch (index) {
             case 0:
@@ -66,8 +77,14 @@ function ChampionCard({ champion, index, rerollFunc, keystoneIndex }: Props) {
                             <div className="top-0 right-0 flex h-full w-full ">
                                 <div className="flex flex-1 justify-center ">
                                     <div className="mt-8 flex h-8 w-16 bg-gray-900">
-                                        <img src="" alt="" />
-                                        <img src="" alt="" />
+                                        <img
+                                            src={sumSpells[0]?.imgURL}
+                                            alt=""
+                                        />
+                                        <img
+                                            src={sumSpells[1]?.imgURL}
+                                            alt=""
+                                        />
                                     </div>
                                 </div>
                                 <div className="flex flex-1 justify-center  pt-5">

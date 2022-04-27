@@ -11,7 +11,7 @@ function genEmtyChampArr() {
     for (let i = 0; i < 5; i++) {
         champArr.push(emptyChamp)
     }
-    console.log(champArr)
+
     return champArr
 }
 

@@ -16,6 +16,9 @@ import populateIndexArray from '../utils/populateIndexArray'
 import keystones from '../public/keystones'
 import genKeystoneArr from '../utils/genKeystoneArr'
 import genRandNum from '../utils/genRandNum'
+import summonerSpells from '../public/summonerSpells'
+import genSumSpellsArr from '../utils/genSumSpellsArr'
+import shuffleArray from '../utils/shuffleArray'
 
 interface ChampionProps {
     alias: string
@@ -37,6 +40,9 @@ const Home = ({
     const [keystoneIndexArr, setKeystoneIndArr] = useState<Array<number>>(
         genKeystoneArr(keystones.length)
     )
+
+    const [sumSpellsArr, setSumSpellsArr] = useState(genSumSpellsArr())
+
     const championCards = randomChamps?.map((champion, index) => {
         return (
             <ChampionCard
@@ -45,6 +51,7 @@ const Home = ({
                 champion={champion}
                 rerollFunc={rerollChampion}
                 keystoneIndex={keystoneIndexArr[index]}
+                sumSpells={sumSpellsArr[index]}
             />
         )
     })
@@ -52,6 +59,7 @@ const Home = ({
     function getRandomChamps() {
         if (champList) {
             setRandomChamps([])
+            setSumSpellsArr(genSumSpellsArr())
             setKeystoneIndArr(genKeystoneArr(keystones.length))
             setIndexArray(populateIndexArray(5, champList.length))
             for (var i = 0; i < indexArray.length; i++) {
@@ -69,6 +77,20 @@ const Home = ({
             champList.length,
             indexArray
         )
+        setSumSpellsArr((prevArray) => {
+            let newArray = []
+            for (let i = 0; i < prevArray.length; i++) {
+                if (i === index) {
+                    let temp = [...summonerSpells]
+                    let shuffled = shuffleArray(temp)
+                    newArray.push(shuffled.splice(0, 2))
+                } else {
+                    newArray.push(prevArray[i])
+                }
+            }
+            return newArray
+        })
+
         setKeystoneIndArr((prevArray) => {
             let newArray = []
             for (let i = 0; i < keystoneIndexArr.length; i++) {
