@@ -13,6 +13,8 @@ import ChampionCard from '../components/ChampionCard'
 import genChampIdsArr from '../utils/genChampIdsArr'
 import genKeystoneArr from '../utils/genKeystoneArr'
 import keystones from '../public/keystones'
+import Footer from '../components/Footer'
+import Navbar from '../components/Navbar'
 
 const Home = ({
     champList,
@@ -80,10 +82,11 @@ const Home = ({
     }
 
     return (
-        <div className="background h-screen w-full max-w-full overflow-hidden">
-            <div className="hero-grid absolute z-0 h-screen w-full "></div>
-            <div className="gradient absolute h-screen w-full"></div>
-            <div className=" relative z-[1] flex h-screen w-full flex-col items-center justify-center">
+        <div className="background flex h-screen flex-col overflow-hidden">
+            <Navbar />
+            <div className="hero-grid absolute z-0 h-full w-full "></div>
+            <div className="gradient absolute h-full w-full"></div>
+            <div className="relative z-10 flex h-full w-full flex-col items-center justify-center">
                 <div>
                     <input
                         type="range"
@@ -96,12 +99,13 @@ const Home = ({
                 <div className="m-4 flex">{championCards}</div>
 
                 <div
-                    className="block h-16 cursor-pointer  border border-gray-300 bg-gray-700 px-8 py-2"
+                    className="z-10 flex h-16 w-52 cursor-pointer items-center justify-center rounded-full bg-[#0BC6E3] px-8 py-2 text-lg font-semibold text-white transition duration-500 hover:scale-105"
                     onClick={getRandomChamps}
                 >
-                    RANDOM
+                    <span>RANDOM</span>
                 </div>
             </div>
+            <Footer />
         </div>
     )
 }
