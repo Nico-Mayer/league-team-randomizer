@@ -10,121 +10,96 @@ export async function getStaticProps() {
 import type { InferGetStaticPropsType, NextPage } from 'next'
 import { useState } from 'react'
 import ChampionCard from '../components/ChampionCard'
-import genEmtyChampArr from '../utils/genEmtyChampArr'
-import genIndex from '../utils/genIndex'
-import populateIndexArray from '../utils/populateIndexArray'
-import keystones from '../public/keystones'
+import genChampIdsArr from '../utils/genChampIdsArr'
 import genKeystoneArr from '../utils/genKeystoneArr'
-import genRandNum from '../utils/genRandNum'
-import summonerSpells from '../public/summonerSpells'
-import genSumSpellsArr from '../utils/genSumSpellsArr'
-import shuffleArray from '../utils/shuffleArray'
-
-interface ChampionProps {
-    alias: string
-    id: number
-    name: string
-    roles: string[]
-    squarePortraitPath: string
-}
+import keystones from '../public/keystones'
 
 const Home = ({
     champList,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
-    const [indexArray, setIndexArray] = useState<Array<number>>(
-        populateIndexArray(5, champList.length)
+    const [teamSize, setTeamSize] = useState(5)
+    const [champIds, setChampIds] = useState<Array<number>>(
+        genChampIdsArr(teamSize, champList.length)
     )
-    const [randomChamps, setRandomChamps] = useState<Array<ChampionProps>>(
-        genEmtyChampArr()
-    )
-    const [keystoneIndexArr, setKeystoneIndArr] = useState<Array<number>>(
-        genKeystoneArr(keystones.length)
-    )
+    const [keyStoneArr, setKeyStoneArr] = useState(genKeystoneArr(teamSize))
 
-    const [sumSpellsArr, setSumSpellsArr] = useState(genSumSpellsArr())
-
-    const championCards = randomChamps?.map((champion, index) => {
+    const championCards = champIds?.map((champId, index) => {
         return (
             <ChampionCard
                 key={index}
                 index={index}
-                champion={champion}
+                champId={champId}
+                champList={champList}
+                keyStone={keyStoneArr[index]}
                 rerollFunc={rerollChampion}
-                keystoneIndex={keystoneIndexArr[index]}
-                sumSpells={sumSpellsArr[index]}
             />
         )
     })
 
     function getRandomChamps() {
-        if (champList) {
-            setRandomChamps([])
-            setSumSpellsArr(genSumSpellsArr())
-            setKeystoneIndArr(genKeystoneArr(keystones.length))
-            setIndexArray(populateIndexArray(5, champList.length))
-            for (var i = 0; i < indexArray.length; i++) {
-                setRandomChamps((prevArray) => {
-                    return [...prevArray, champList[indexArray[i]]]
-                })
-            }
-        }
+        setChampIds(genChampIdsArr(teamSize, champList.length))
+        setKeyStoneArr(genKeystoneArr(teamSize))
     }
 
-    function rerollChampion(index: number) {
-        const prevChampListIndex = indexArray[index]
-        const newChampListIndex = genIndex(
-            prevChampListIndex,
-            champList.length,
-            indexArray
-        )
-        setSumSpellsArr((prevArray) => {
-            let newArray = []
-            for (let i = 0; i < prevArray.length; i++) {
+    function rerollChampion(champId: number, index: number) {
+        // Change the Champ Id Array
+        let newId = Math.floor(Math.random() * champList.length)
+        while (newId === 0 || champIds.includes(newId)) {
+            newId = Math.floor(Math.random() * champList.length)
+        }
+        setChampIds((prevArr) => {
+            let newChampIdArr = []
+            for (var i = 0; i < champIds.length; i++) {
+                if (champIds[i] == champId) {
+                    newChampIdArr.push(newId)
+                } else {
+                    newChampIdArr.push(prevArr[i])
+                }
+            }
+            return newChampIdArr
+        })
+        // Change the keystone array
+        console.log(index)
+        setKeyStoneArr((prevArr) => {
+            let newKeystoneArr = []
+            let newKeystone = Math.floor(Math.random() * keystones.length)
+            for (let i = 0; i < champIds.length; i++) {
                 if (i === index) {
-                    let temp = [...summonerSpells]
-                    let shuffled = shuffleArray(temp)
-                    newArray.push(shuffled.splice(0, 2))
+                    newKeystoneArr.push(newKeystone)
                 } else {
-                    newArray.push(prevArray[i])
+                    newKeystoneArr.push(prevArr[i])
                 }
             }
-            return newArray
+            return newKeystoneArr
         })
+    }
 
-        setKeystoneIndArr((prevArray) => {
-            let newArray = []
-            for (let i = 0; i < keystoneIndexArr.length; i++) {
-                if (i === index) {
-                    newArray.push(genRandNum(keystones.length))
-                } else {
-                    newArray.push(prevArray[i])
-                }
-            }
-            return newArray
-        })
-
-        setRandomChamps((prevArray) => {
-            let newArray = []
-            for (let i = 0; i < prevArray.length; i++) {
-                if (i == index) {
-                    newArray.push(champList[newChampListIndex])
-                } else {
-                    newArray.push(prevArray[i])
-                }
-            }
-            return newArray
-        })
+    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const newValue = parseInt(e.target.value)
+        setTeamSize(newValue)
     }
 
     return (
-        <div className="background flex h-screen flex-col items-center justify-center bg-gray-800">
-            <div className="m-4 flex">{championCards}</div>
+        <div className="background relative h-screen max-w-full ">
+            <div className="gradient absolute z-0 h-screen w-full opacity-70"></div>
+            <div className=" relative z-[1] flex h-screen flex-col items-center justify-center">
+                <div>
+                    <input
+                        type="range"
+                        min="1"
+                        max="5"
+                        value={teamSize}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className="m-4 flex">{championCards}</div>
 
-            <div
-                className="block h-16 cursor-pointer  border border-gray-300 bg-gray-700 px-8 py-2"
-                onClick={getRandomChamps}
-            >
-                RANDOM
+                <div
+                    className="block h-16 cursor-pointer  border border-gray-300 bg-gray-700 px-8 py-2"
+                    onClick={getRandomChamps}
+                >
+                    RANDOM
+                </div>
             </div>
         </div>
     )

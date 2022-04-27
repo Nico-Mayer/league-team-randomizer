@@ -19,3 +19,13 @@
     -webkit-user-select: none;
     -ms-user-select: none;
 }
+
+.gradient {
+    background: rgb(6, 2, 41);
+    background: linear-gradient(
+        180deg,
+        rgba(6, 2, 41, 1) 0%,
+        rgba(6, 2, 41, 0.7091211484593838) 33%,
+        rgba(255, 255, 255, 0) 100%
+    );
+}

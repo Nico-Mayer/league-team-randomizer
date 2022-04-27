@@ -1,10 +1,11 @@
-function genKeystoneArr(maxSize: number) {
-    const newArray = []
-    for (let i = 0; i < maxSize; i++) {
-        let randomIndex = Math.floor(Math.random() * maxSize)
-        newArray.push(randomIndex)
+import keystones from '../public/keystones'
+
+function genKeystoneArr(teamSize: number) {
+    let keyStoneArr = []
+    for (let i = 0; i < teamSize; i++) {
+        keyStoneArr.push(Math.floor(Math.random() * keystones.length))
     }
-    return newArray
+    return keyStoneArr
 }
 
 export default genKeystoneArr
