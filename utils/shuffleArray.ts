@@ -1,4 +1,4 @@
-export default function shuffleArray(array) {
+export default function shuffleArray(array: []) {
     for (var i = array.length - 1; i > 0; i--) {
         let randomPos = Math.floor(Math.random() * (i + 1))
         let temp = array[i]
