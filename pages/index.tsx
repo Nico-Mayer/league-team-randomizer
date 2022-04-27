@@ -80,9 +80,10 @@ const Home = ({
     }
 
     return (
-        <div className="background relative h-screen max-w-full ">
-            <div className="gradient absolute z-0 h-screen w-full opacity-70"></div>
-            <div className=" relative z-[1] flex h-screen flex-col items-center justify-center">
+        <div className="background h-screen w-full max-w-full overflow-hidden">
+            <div className="hero-grid absolute z-0 h-screen w-full "></div>
+            <div className="gradient absolute h-screen w-full"></div>
+            <div className=" relative z-[1] flex h-screen w-full flex-col items-center justify-center">
                 <div>
                     <input
                         type="range"
