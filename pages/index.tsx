@@ -8,27 +8,59 @@ export async function getStaticProps() {
         'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json'
     )
     let data2 = await res2.json()
-    let mythics = data2.filter((item) => item.requiredAlly == 'Ornn')
-    let boots = data2.filter((item) => item.categories.includes('Boots'))
-    boots = boots.filter((item) => item.priceTotal > 300)
+    let mythics = data2.filter(
+        (item: { requiredAlly: string }) => item.requiredAlly == 'Ornn'
+    )
+    let boots = data2.filter((item: { categories: string | string[] }) =>
+        item.categories.includes('Boots')
+    )
+    boots = boots.filter(
+        (item: { priceTotal: number }) => item.priceTotal > 300
+    )
 
-    let genItems = data2.filter((item) => item.requiredAlly == false)
-    genItems = genItems.filter((item) => item.requiredBuffCurrencyName == false)
-    genItems = genItems.filter((item) => !item.categories.includes('Boots'))
-    genItems = genItems.filter((item) => item.to == false)
+    let genItems = data2.filter(
+        (item: { requiredAlly: boolean }) => item.requiredAlly == false
+    )
+    genItems = genItems.filter(
+        (item: { requiredBuffCurrencyName: boolean }) =>
+            item.requiredBuffCurrencyName == false
+    )
+    genItems = genItems.filter(
+        (item: { categories: string | string[] }) =>
+            !item.categories.includes('Boots')
+    )
+    genItems = genItems.filter((item: { to: boolean }) => item.to == false)
     genItems = genItems.filter(
         (item: { inStore: any }) => !item.inStore == false
     )
-    genItems = genItems.filter((item) => !item.name.includes('Doran'))
-    genItems = genItems.filter((item) => !item.name.includes('Cull'))
-    genItems = genItems.filter((item) => !item.name.includes("Guardian's"))
-    genItems = genItems.filter((item) => !item.name.includes('Spatula'))
-    genItems = genItems.filter((item) => !item.categories.includes('Trinket'))
-    genItems = genItems.filter((item) => !item.categories.includes('GoldPer'))
     genItems = genItems.filter(
-        (item) => !item.categories.includes('Consumable')
+        (item: { name: string | string[] }) => !item.name.includes('Doran')
     )
-    genItems = genItems.filter((item) => !item.categories.includes('Jungle'))
+    genItems = genItems.filter(
+        (item: { name: string | string[] }) => !item.name.includes('Cull')
+    )
+    genItems = genItems.filter(
+        (item: { name: string | string[] }) => !item.name.includes("Guardian's")
+    )
+    genItems = genItems.filter(
+        (item: { name: string | string[] }) => !item.name.includes('Spatula')
+    )
+    genItems = genItems.filter(
+        (item: { categories: string | string[] }) =>
+            !item.categories.includes('Trinket')
+    )
+    genItems = genItems.filter(
+        (item: { categories: string | string[] }) =>
+            !item.categories.includes('GoldPer')
+    )
+    genItems = genItems.filter(
+        (item: { categories: string | string[] }) =>
+            !item.categories.includes('Consumable')
+    )
+    genItems = genItems.filter(
+        (item: { categories: string | string[] }) =>
+            !item.categories.includes('Jungle')
+    )
 
     return {
         props: {
