@@ -13,8 +13,12 @@ import ChampionCard from '../components/ChampionCard'
 import genChampIdsArr from '../utils/genChampIdsArr'
 import genKeystoneArr from '../utils/genKeystoneArr'
 import keystones from '../public/keystones'
+import summonerSpells from '../public/summonerSpells'
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
+import genLaneIdArr from '../utils/genLaneIdArr'
+import genSumSpellsArr from '../utils/genSumSpellsArr'
+import shuffleArray from '../utils/shuffleArray'
 
 const Home = ({
     champList,
@@ -24,6 +28,8 @@ const Home = ({
         genChampIdsArr(teamSize, champList.length)
     )
     const [keyStoneArr, setKeyStoneArr] = useState(genKeystoneArr(teamSize))
+    const [laneIds, setLaneIds] = useState(genLaneIdArr(teamSize))
+    const [sumSpells, setSumSpells] = useState(genSumSpellsArr(teamSize))
 
     const championCards = champIds?.map((champId, index) => {
         return (
@@ -31,8 +37,10 @@ const Home = ({
                 key={index}
                 index={index}
                 champId={champId}
-                champList={champList}
+                champData={champList[champId]}
                 keyStone={keyStoneArr[index]}
+                laneId={laneIds[index]}
+                sumSpells={sumSpells[index]}
                 rerollFunc={rerollChampion}
             />
         )
@@ -41,9 +49,15 @@ const Home = ({
     function getRandomChamps() {
         setChampIds(genChampIdsArr(teamSize, champList.length))
         setKeyStoneArr(genKeystoneArr(teamSize))
+        setLaneIds(genLaneIdArr(teamSize))
+        setSumSpells(genSumSpellsArr(teamSize))
     }
 
-    function rerollChampion(champId: number, index: number) {
+    function rerollChampion(
+        champId: number,
+        index: number,
+        prevLaneId: number
+    ) {
         // Change the Champ Id Array
         let newId = Math.floor(Math.random() * champList.length)
         while (newId === 0 || champIds.includes(newId)) {
@@ -61,7 +75,6 @@ const Home = ({
             return newChampIdArr
         })
         // Change the keystone array
-        console.log(index)
         setKeyStoneArr((prevArr) => {
             let newKeystoneArr = []
             let newKeystone = Math.floor(Math.random() * keystones.length)
@@ -73,6 +86,46 @@ const Home = ({
                 }
             }
             return newKeystoneArr
+        })
+        // Change laneIds
+        setLaneIds((prevArr: number[]) => {
+            const laneIds = [1, 2, 3, 4, 5]
+            const possibleLanes = []
+            for (let i = 0; i < laneIds.length; i++) {
+                if (!prevArr.includes(laneIds[i])) {
+                    possibleLanes.push(laneIds[i])
+                }
+            }
+            possibleLanes.push(prevLaneId)
+
+            const newArray = []
+            for (let i = 0; i < prevArr.length; i++) {
+                if (i === index) {
+                    newArray.push(
+                        possibleLanes[
+                            Math.floor(Math.random() * possibleLanes.length)
+                        ]
+                    )
+                } else {
+                    newArray.push(prevArr[i])
+                }
+            }
+            return newArray
+        })
+
+        // Chane SummonerSpells
+        setSumSpells((prevArr) => {
+            const newArray = []
+            const shuffled = shuffleArray([...summonerSpells])
+            const newSpells = shuffled.splice(0, 2)
+            for (let i = 0; i < prevArr.length; i++) {
+                if (i === index) {
+                    newArray.push(newSpells)
+                } else {
+                    newArray.push(prevArr[i])
+                }
+            }
+            return newArray
         })
     }
 
@@ -86,7 +139,7 @@ const Home = ({
             <Navbar />
             <div className="hero-grid absolute z-0 h-full w-full "></div>
             <div className="gradient absolute h-full w-full"></div>
-            <div className="relative z-10 flex h-full w-full flex-col items-center justify-center">
+            <div className="relative z-10 mx-auto flex h-full w-full flex-col items-center justify-center">
                 <div>
                     <input
                         type="range"
@@ -96,10 +149,10 @@ const Home = ({
                         onChange={handleChange}
                     />
                 </div>
-                <div className="m-4 flex">{championCards}</div>
+                <div className="flex w-full flex-col">{championCards}</div>
 
                 <div
-                    className="z-10 flex h-16 w-52 cursor-pointer items-center justify-center rounded-full bg-[#0BC6E3] px-8 py-2 text-lg font-semibold text-white transition duration-500 hover:scale-105"
+                    className="z-10 flex h-16 w-52 cursor-pointer select-none items-center justify-center rounded-full bg-[#0BC6E3] px-8 py-2 text-lg font-semibold text-white transition duration-500 hover:scale-105"
                     onClick={getRandomChamps}
                 >
                     <span>RANDOM</span>
