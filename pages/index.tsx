@@ -84,6 +84,7 @@ import Navbar from '../components/Navbar'
 import genLaneIdArr from '../utils/genLaneIdArr'
 import genSumSpellsArr from '../utils/genSumSpellsArr'
 import shuffleArray from '../utils/shuffleArray'
+import genItemArr from '../utils/genItemArr'
 
 const Home = ({
     champList,
@@ -98,6 +99,9 @@ const Home = ({
     const [keyStoneArr, setKeyStoneArr] = useState(genKeystoneArr(teamSize))
     const [laneIds, setLaneIds] = useState(genLaneIdArr(teamSize))
     const [sumSpells, setSumSpells] = useState(genSumSpellsArr(teamSize))
+    const [itemArr, setItemArr] = useState(
+        genItemArr(teamSize, genItems, mythics, boots)
+    )
 
     const championCards = champIds?.map((champId, index) => {
         return (
@@ -109,6 +113,7 @@ const Home = ({
                 keyStone={keyStoneArr[index]}
                 laneId={laneIds[index]}
                 sumSpells={sumSpells[index]}
+                items={itemArr[index]}
                 rerollFunc={rerollChampion}
             />
         )
@@ -181,7 +186,7 @@ const Home = ({
             return newArray
         })
 
-        // Chane SummonerSpells
+        // Change SummonerSpells
         setSumSpells((prevArr) => {
             const newArray = []
             const shuffled = shuffleArray([...summonerSpells])

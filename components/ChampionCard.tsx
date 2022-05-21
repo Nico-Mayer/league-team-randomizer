@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import keystones from '../public/keystones'
 import summonerSpells from '../public/summonerSpells'
+import Image from 'next/image'
 
 interface Props {
     index: number
@@ -26,6 +27,16 @@ interface Props {
             name: string
         }
     ]
+    items: {
+        slot1: {
+            iconPath: string
+        }
+        slot2: { iconPath: string }
+        slot3: { iconPath: string }
+        slot4: { iconPath: string }
+        slot5: { iconPath: string }
+        slot6: { iconPath: string }
+    }
     rerollFunc: (champId: number, index: number, laneId: number) => void
 }
 
@@ -36,6 +47,7 @@ function ChampionCard({
     keyStone,
     laneId,
     sumSpells,
+    items,
     rerollFunc,
 }: Props) {
     const champion = champData
@@ -60,39 +72,101 @@ function ChampionCard({
         }
     }
 
+    console.log(items)
+
     return (
         <div
-            className="mx-auto my-4 flex h-32 w-full max-w-[80rem] items-center justify-between rounded-lg bg-[#082032a1] p-2 text-white transition duration-500 hover:scale-105"
+            className="mx-auto my-4 flex h-32 w-full max-w-[80rem] items-center justify-between rounded-lg bg-[#082032a1] py-2 px-4 text-white transition duration-500 hover:scale-105"
             onClick={() => rerollFunc(champId, index, laneId)}
         >
-            <div className="flex w-[50%] items-center justify-between">
+            <div className="flex w-full items-center justify-between">
                 <img
                     src={`https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/${champion.id}.png`}
                     alt=""
-                    className="h-24 w-24 rounded-lg"
+                    className="undragable h-[96px] w-[96px] rounded-lg"
                 />
-                <div className="flex h-24 w-32 flex-col items-center justify-center">
+                <div className="undragable flex h-24 w-32 flex-col items-center justify-center">
                     <h3 className="h3 text-xl font-semibold">
                         {champion.name}
                     </h3>
-                    <img className="h-12 w-12" src={laneIcon()} alt="" />
+                    <img
+                        className="undragable h-12 w-12"
+                        src={laneIcon()}
+                        alt=""
+                    />
                 </div>
                 <img
                     src={keystones[keyStone].imgURL}
                     alt=""
-                    className="h-16 w-16"
+                    className="undragable h-16 w-16"
                 />
                 <div className="">
                     <img
-                        className="mb-1 h-10 w-10 rounded-lg"
+                        className="undragable mb-1 h-10 w-10 rounded-lg"
                         src={sumSpells[0].imgURL}
                         alt=""
                     />
                     <img
-                        className="h-10 w-10 rounded-lg"
+                        className="undragable h-10 w-10 rounded-lg"
                         src={sumSpells[1].imgURL}
                         alt=""
                     />
+                </div>
+
+                <div className="flex flex-col space-y-1">
+                    <div className="flex space-x-1">
+                        <Image
+                            className="undragable w-10 rounded-lg"
+                            src={
+                                'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/' +
+                                items.slot1.iconPath.slice(43).toLowerCase()
+                            }
+                            height={40}
+                            width={40}
+                        />
+                        <img
+                            className="undragable w-10 rounded-lg"
+                            src={
+                                'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/' +
+                                items.slot2.iconPath.slice(43).toLowerCase()
+                            }
+                            alt=""
+                        />
+                        <img
+                            className="undragable w-10 rounded-lg"
+                            src={
+                                'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/' +
+                                items.slot3.iconPath.slice(43).toLowerCase()
+                            }
+                            alt=""
+                        />
+                    </div>
+                    <div className="flex space-x-1">
+                        <img
+                            className="undragable w-10 rounded-lg"
+                            src={
+                                'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/' +
+                                items.slot4.iconPath.slice(43).toLowerCase()
+                            }
+                            alt=""
+                        />
+                        <img
+                            className="undragable w-10 rounded-lg"
+                            src={
+                                'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/' +
+                                items.slot5.iconPath.slice(43).toLowerCase()
+                            }
+                            alt=""
+                        />
+                        <img
+                            className="undragable w-10 rounded"
+                            src={
+                                'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/' +
+                                items.slot6.iconPath.slice(43).toLowerCase()
+                            }
+                            alt=""
+                        />
+                    </div>
                 </div>
             </div>
         </div>
