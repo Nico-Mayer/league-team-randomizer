@@ -8,7 +8,7 @@ export default function genItemArr(
 ) {
     let newItems = []
     for (let i = 0; i < teamSize; i++) {
-        let normalItems = shuffleArray(genItems).splice(0, 4)
+        let normalItems = shuffleArray([...genItems]).splice(0, 4)
 
         let loadout = {
             slot1: mythics[Math.floor(Math.random() * mythics.length)],

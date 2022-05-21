@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import keystones from '../public/keystones'
 import summonerSpells from '../public/summonerSpells'
-import Image from 'next/image'
 
 interface Props {
     index: number
@@ -72,8 +71,6 @@ function ChampionCard({
         }
     }
 
-    console.log(items)
-
     return (
         <div
             className="mx-auto my-4 flex h-32 w-full max-w-[80rem] items-center justify-between rounded-lg bg-[#082032a1] py-2 px-4 text-white transition duration-500 hover:scale-105"
@@ -115,14 +112,14 @@ function ChampionCard({
 
                 <div className="flex flex-col space-y-1">
                     <div className="flex space-x-1">
-                        <Image
-                            className="undragable w-10 rounded-lg"
+                        <img
+                            data-tooltip-target="tooltip-default"
+                            className="undragable w-10 rounded-lg border-2 border-orange-500"
                             src={
                                 'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/' +
                                 items.slot1.iconPath.slice(43).toLowerCase()
                             }
-                            height={40}
-                            width={40}
+                            alt="#"
                         />
                         <img
                             className="undragable w-10 rounded-lg"

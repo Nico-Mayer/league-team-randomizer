@@ -73,7 +73,7 @@ export async function getStaticProps() {
 }
 
 import type { InferGetStaticPropsType, NextPage } from 'next'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ChampionCard from '../components/ChampionCard'
 import genChampIdsArr from '../utils/genChampIdsArr'
 import genKeystoneArr from '../utils/genKeystoneArr'
@@ -99,6 +99,7 @@ const Home = ({
     const [keyStoneArr, setKeyStoneArr] = useState(genKeystoneArr(teamSize))
     const [laneIds, setLaneIds] = useState(genLaneIdArr(teamSize))
     const [sumSpells, setSumSpells] = useState(genSumSpellsArr(teamSize))
+
     const [itemArr, setItemArr] = useState(
         genItemArr(teamSize, genItems, mythics, boots)
     )
@@ -118,8 +119,10 @@ const Home = ({
             />
         )
     })
+    console.log(genItems)
 
     function getRandomChamps() {
+        setItemArr(genItemArr(teamSize, genItems, mythics, boots))
         setChampIds(genChampIdsArr(teamSize, champList.length))
         setKeyStoneArr(genKeystoneArr(teamSize))
         setLaneIds(genLaneIdArr(teamSize))
@@ -194,6 +197,19 @@ const Home = ({
             for (let i = 0; i < prevArr.length; i++) {
                 if (i === index) {
                     newArray.push(newSpells)
+                } else {
+                    newArray.push(prevArr[i])
+                }
+            }
+            return newArray
+        })
+
+        // Change items
+        setItemArr((prevArr) => {
+            let newArray = []
+            for (let i = 0; i < prevArr.length; i++) {
+                if (i === index) {
+                    newArray.push(genItemArr(1, genItems, mythics, boots)[0])
                 } else {
                     newArray.push(prevArr[i])
                 }
